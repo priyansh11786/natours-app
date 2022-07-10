@@ -12,15 +12,6 @@ const reviewRouter = require('./routes/reviewRoutes')
 const viewRouter = require('./routes/viewRoutes')
 const bookingRouter = require('./routes/bookingRoutes')
 
-// const scriptSrcUrls = ['https://unpkg.com/', 'https://tile.openstreetmap.org'];
-// const styleSrcUrls = [
-//   'https://unpkg.com/',
-//   'https://tile.openstreetmap.org',
-//   'https://fonts.googleapis.com/'
-// ];
-// const connectSrcUrls = ['https://unpkg.com', 'https://tile.openstreetmap.org'];
-// const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
-
 
 const app = express();
 
@@ -57,9 +48,6 @@ app.use(
           "'self'",
           'data:',
           'blob:',
-          // 'https://*.tiles.mapbox.com',
-          // 'https://api.mapbox.com',
-          // 'https://events.mapbox.com',
           'https://m.stripe.network',
         ],
         childSrc: ["'self'", 'blob:'],
@@ -83,23 +71,6 @@ app.use(
 
 
 
-// app.use(helmet({
-//   crossOriginEmbedderPolicy: false,
-//   contentSecurityPolicy: {
-//     directives: {
-//       defaultSrc: ["'none'"],
-//       connectSrc: ["'self'", ...connectSrcUrls],
-//       scriptSrc: ["'self'", ...scriptSrcUrls],
-//       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-//       workerSrc: ["'self'", 'blob:'],
-//       objectSrc: ["'none'"],
-//       imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
-//       fontSrc: ["'self'", ...fontSrcUrls]
-//     }
-//   }
-// }))
-
-
 if (process.env.NODE_ENV == 'development') {
   app.use(morgan('dev'))
 }
@@ -116,6 +87,8 @@ app.use('/api', limiter)
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser())
+
+app.use(compression())
 
 app.use('/', viewRouter)
 app.use('/api/v1/tours', tourRouter);
